@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Send } from "lucide-react";
 
 import { analyzeEmail, type AnalysisResult } from "@/lib/analyzer.functions";
+import { addToHistory } from "@/lib/history-store";
 import { AnalysisReport } from "./AnalysisReport";
 
 export function ScanForm() {
@@ -21,6 +22,8 @@ export function ScanForm() {
     try {
       const res = await analyze({ data: { sender, subject, body } });
       setResult(res);
+      const senderName = sender.includes("@") ? sender.split("@")[0] : sender;
+      addToHistory({ sender, senderName, subject, body, result: res });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to analyze");
     } finally {

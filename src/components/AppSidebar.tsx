@@ -6,7 +6,7 @@ interface AppSidebarProps {
 }
 
 const items = [
-  { id: "inbox" as const, label: "Demo inbox", icon: Inbox },
+  { id: "inbox" as const, label: "History inbox", icon: Inbox },
   { id: "scan" as const, label: "Scan an email", icon: FileSearch },
   { id: "about" as const, label: "About", icon: Info },
 ];

@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Legit Mail" },
+      { name: "description", content: "LegitMail scans emails to identify potential scams and phishing attempts." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Legit Mail" },
+      { property: "og:description", content: "LegitMail scans emails to identify potential scams and phishing attempts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Legit Mail" },
+      { name: "twitter:description", content: "LegitMail scans emails to identify potential scams and phishing attempts." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6da1c78b-8b98-459e-9d74-797748f37b47/id-preview-b2df4297--39c90d5f-a653-45c9-a6a3-c1c5c40cca05.lovable.app-1780942396611.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6da1c78b-8b98-459e-9d74-797748f37b47/id-preview-b2df4297--39c90d5f-a653-45c9-a6a3-c1c5c40cca05.lovable.app-1780942396611.png" },
     ],
     links: [
       {

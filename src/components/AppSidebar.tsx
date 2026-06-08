@@ -6,7 +6,7 @@ interface AppSidebarProps {
 }
 
 const items = [
-  { id: "inbox" as const, label: "Demo inbox", icon: Inbox },
+  { id: "inbox" as const, label: "History inbox", icon: Inbox },
   { id: "scan" as const, label: "Scan an email", icon: FileSearch },
   { id: "about" as const, label: "About", icon: Info },
 ];
@@ -19,8 +19,7 @@ export function AppSidebar({ view, onChange }: AppSidebarProps) {
           <ShieldCheck className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm font-semibold leading-none">SafeIntern</p>
-          <p className="text-xs text-muted-foreground mt-0.5">Email scam scanner</p>
+          <p className="text-sm font-semibold leading-none">LegitMail</p>
         </div>
       </div>
 

@@ -1,25 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { Inbox, ShieldCheck, Trash2 } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { EmailListItem } from "@/components/EmailListItem";
 import { EmailDetailModal } from "@/components/EmailDetailModal";
 import { ScanForm } from "@/components/ScanForm";
-import { analyzeEmail, type AnalysisResult, type AnalysisStatus } from "@/lib/analyzer.functions";
-import { SAMPLE_EMAILS } from "@/lib/sample-emails";
+import { clearHistory, useHistory } from "@/lib/history-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SafeIntern — Email scam scanner for students" },
+      { title: "LegitMail — Email scam scanner for students" },
       {
         name: "description",
         content:
-          "Detect phishing and internship scams in your inbox. AI-powered analysis flags red flags, risky links, and fake recruiters.",
+          "Detect phishing and internship scams. AI-powered analysis flags red flags, risky links, and fake recruiters.",
       },
-      { property: "og:title", content: "SafeIntern — Email scam scanner for students" },
+      { property: "og:title", content: "LegitMail — Email scam scanner for students" },
       {
         property: "og:description",
         content: "AI-powered scanner that flags phishing and internship scams in seconds.",
@@ -30,57 +28,18 @@ export const Route = createFileRoute("/")({
 });
 
 type View = "inbox" | "scan" | "about";
-type AnalysisState = {
-  status: AnalysisStatus | "Analyzing" | null;
-  result?: AnalysisResult;
-};
 
 function Dashboard() {
   const [view, setView] = useState<View>("inbox");
   const [openId, setOpenId] = useState<string | null>(null);
-  const [analyses, setAnalyses] = useState<Record<string, AnalysisState>>({});
-  const [analyzing, setAnalyzing] = useState(true);
-  const analyze = useServerFn(analyzeEmail);
+  const history = useHistory();
 
-  useEffect(() => {
-    let cancelled = false;
-    async function run() {
-      setAnalyzing(true);
-      // Mark all as analyzing
-      setAnalyses(
-        Object.fromEntries(SAMPLE_EMAILS.map((e) => [e.id, { status: "Analyzing" as const }])),
-      );
-      for (const email of SAMPLE_EMAILS) {
-        if (cancelled) return;
-        try {
-          const result = await analyze({
-            data: { sender: email.sender, subject: email.subject, body: email.body },
-          });
-          if (cancelled) return;
-          setAnalyses((prev) => ({
-            ...prev,
-            [email.id]: { status: result.status, result },
-          }));
-        } catch {
-          if (cancelled) return;
-          setAnalyses((prev) => ({ ...prev, [email.id]: { status: null } }));
-        }
-      }
-      if (!cancelled) setAnalyzing(false);
-    }
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, [analyze]);
-
-  const openEmail = openId ? SAMPLE_EMAILS.find((e) => e.id === openId) : null;
-  const openState = openId ? analyses[openId] : undefined;
+  const openEmail = openId ? history.find((e) => e.id === openId) : null;
 
   const counts = {
-    safe: Object.values(analyses).filter((a) => a.status === "Safe").length,
-    suspicious: Object.values(analyses).filter((a) => a.status === "Suspicious").length,
-    scam: Object.values(analyses).filter((a) => a.status === "Scam").length,
+    safe: history.filter((a) => a.result.status === "Safe").length,
+    suspicious: history.filter((a) => a.result.status === "Suspicious").length,
+    scam: history.filter((a) => a.result.status === "Scam").length,
   };
 
   return (
@@ -94,20 +53,20 @@ function Dashboard() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <ShieldCheck className="h-4 w-4" />
               </div>
-              <span className="font-semibold">SafeIntern</span>
+              <span className="font-semibold">LegitMail</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              {view === "inbox" && "Your demo inbox"}
+              {view === "inbox" && "History inbox"}
               {view === "scan" && "Scan an email"}
-              {view === "about" && "About SafeIntern"}
+              {view === "about" && "About LegitMail"}
             </h1>
             <p className="text-muted-foreground mt-2 max-w-2xl">
               {view === "inbox" &&
-                "Sample emails students often receive while job-hunting. Each one is scored for scam risk."}
+                "Every email you scan is saved here so you can revisit the analysis."}
               {view === "scan" &&
                 "Got a sketchy recruiter email? Paste it in and we'll break down the red flags."}
               {view === "about" &&
-                "How SafeIntern protects students from internship scams and phishing."}
+                "How LegitMail protects students from internship scams and phishing."}
             </p>
           </header>
 
@@ -119,27 +78,42 @@ function Dashboard() {
                 <StatCard label="Scam" value={counts.scam} tone="danger" />
               </div>
 
-              {analyzing && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                  Analyzing emails with AI…
+              {history.length === 0 ? (
+                <div className="rounded-2xl border border-dashed bg-card p-10 text-center">
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                    <Inbox className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <p className="font-medium">No scans yet</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Head to <button onClick={() => setView("scan")} className="text-primary underline underline-offset-2">Scan an email</button> to analyze your first message.
+                  </p>
                 </div>
+              ) : (
+                <>
+                  <div className="flex justify-end mb-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirm("Clear all scan history?")) clearHistory();
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-danger"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Clear history
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {history.map((email) => (
+                      <EmailListItem
+                        key={email.id}
+                        email={email}
+                        status={email.result.status}
+                        result={email.result}
+                        onClick={() => setOpenId(email.id)}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
-
-              <div className="space-y-3">
-                {SAMPLE_EMAILS.map((email) => {
-                  const a = analyses[email.id] ?? { status: null };
-                  return (
-                    <EmailListItem
-                      key={email.id}
-                      email={email}
-                      status={a.status}
-                      result={a.result}
-                      onClick={() => setOpenId(email.id)}
-                    />
-                  );
-                })}
-              </div>
             </>
           )}
 
@@ -148,7 +122,7 @@ function Dashboard() {
           {view === "about" && (
             <div className="prose prose-sm max-w-none space-y-4 text-foreground/90">
               <p>
-                SafeIntern combines <strong>three layers</strong> to detect internship and recruitment scams:
+                LegitMail combines <strong>three layers</strong> to detect internship and recruitment scams:
               </p>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li>
@@ -174,11 +148,11 @@ function Dashboard() {
         </div>
       </main>
 
-      {openEmail && openState && (
+      {openEmail && (
         <EmailDetailModal
           email={openEmail}
-          status={openState.status}
-          result={openState.result}
+          status={openEmail.result.status}
+          result={openEmail.result}
           onClose={() => setOpenId(null)}
         />
       )}

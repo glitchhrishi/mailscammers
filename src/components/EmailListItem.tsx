@@ -2,10 +2,9 @@ import { format } from "date-fns";
 
 import { StatusBadge } from "./StatusBadge";
 import type { AnalysisResult, AnalysisStatus } from "@/lib/analyzer.functions";
-import type { SampleEmail } from "@/lib/sample-emails";
 
 interface Props {
-  email: SampleEmail;
+  email: { senderName: string; sender: string; subject: string; body: string; date: string };
   status: AnalysisStatus | "Analyzing" | null;
   result?: AnalysisResult;
   onClick: () => void;

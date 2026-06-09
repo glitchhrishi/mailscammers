@@ -49,25 +49,31 @@ function Dashboard() {
 
       <main className="flex-1 min-w-0 overflow-x-hidden">
         <div className="max-w-5xl mx-auto p-6 md:p-10">
-          <header className="mb-8">
+          <header className="mb-10">
             <div className="md:hidden flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <ShieldCheck className="h-4 w-4" />
               </div>
-              <span className="font-semibold">LegitMail</span>
+              <span className="serif-display text-xl">LegitMail</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              {view === "inbox" && "History inbox"}
-              {view === "scan" && "Scan an email"}
+            <p className="small-caps text-[11px] text-[var(--bronze)] mb-2">Codex · Sectio I</p>
+            <h1 className="serif-display text-4xl md:text-5xl text-foreground">
+              {view === "inbox" && "History Inbox"}
+              {view === "scan" && "Scan an Email"}
               {view === "about" && "About LegitMail"}
             </h1>
-            <p className="text-muted-foreground mt-2 max-w-2xl">
+            <div className="flex items-center gap-3 mt-4 mb-4 max-w-md">
+              <div className="h-px flex-1 bg-gradient-to-r from-[var(--bronze)]/50 to-transparent" />
+              <span className="text-[var(--bronze)] text-[10px]">◆</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-[var(--bronze)]/50 to-transparent" />
+            </div>
+            <p className="text-muted-foreground max-w-2xl italic serif-display text-lg leading-relaxed">
               {view === "inbox" &&
-                "Every email you scan is saved here so you can revisit the analysis."}
+                "Every missive examined herein is preserved for your future review."}
               {view === "scan" &&
-                "Got a sketchy recruiter email? Paste it in and we'll break down the red flags."}
+                "Submit a suspect dispatch and we shall unveil its deceptions."}
               {view === "about" &&
-                "How LegitMail protects students from internship scams and phishing."}
+                "How LegitMail shields scholars from counterfeit correspondence."}
             </p>
           </header>
 
@@ -81,30 +87,35 @@ function Dashboard() {
 
               {history.length === 0 ? (
                 <div
-                  className="rounded-3xl border border-dashed border-border/70 p-12 text-center relative overflow-hidden"
-                  style={{ background: "var(--gradient-surface)" }}
+                  className="rounded-lg border-2 border-dashed border-[var(--bronze)]/30 p-14 text-center relative overflow-hidden"
+                  style={{ background: "var(--gradient-surface)", backgroundImage: "var(--parchment-texture)" }}
                 >
-                  <div
-                    className="absolute inset-x-0 -top-20 mx-auto h-40 w-40 rounded-full opacity-20 blur-3xl"
-                    style={{ background: "var(--gradient-primary)" }}
-                  />
+                  {/* Corner ornaments */}
+                  <span className="absolute top-3 left-3 text-[var(--bronze)]/50 text-sm">❦</span>
+                  <span className="absolute top-3 right-3 text-[var(--bronze)]/50 text-sm">❦</span>
+                  <span className="absolute bottom-3 left-3 text-[var(--bronze)]/50 text-sm">❦</span>
+                  <span className="absolute bottom-3 right-3 text-[var(--bronze)]/50 text-sm">❦</span>
+
                   <div className="relative">
                     <div
-                      className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border/60 shadow-sm"
+                      className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[var(--bronze)]/40 shadow-md"
                       style={{ background: "var(--gradient-surface)" }}
                     >
-                      <Mail className="h-7 w-7 text-primary" strokeWidth={1.75} />
+                      <Mail className="h-8 w-8 text-[var(--bronze)]" strokeWidth={1.5} />
                     </div>
-                    <p className="font-semibold text-lg">No scans yet</p>
-                    <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
-                      Head to{" "}
+                    <p className="serif-display text-2xl text-foreground">No scans yet</p>
+                    <div className="flex items-center justify-center gap-2 my-3 text-[var(--bronze)]/60">
+                      <span className="text-[10px]">◆</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto italic">
+                      Proceed to{" "}
                       <button
                         onClick={() => setView("scan")}
-                        className="text-primary font-medium hover:underline underline-offset-2"
+                        className="text-[var(--bronze)] font-medium underline underline-offset-4 decoration-[var(--bronze)]/50 hover:decoration-[var(--bronze)]"
                       >
                         Scan an email
                       </button>{" "}
-                      to analyze your first message.
+                      to examine your first dispatch.
                     </p>
                   </div>
                 </div>

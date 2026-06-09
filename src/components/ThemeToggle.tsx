@@ -31,10 +31,16 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle theme"
-      className="fixed bottom-6 right-6 z-50 group flex h-12 w-12 items-center justify-center rounded-full border border-border/60 bg-card/80 backdrop-blur-xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_40px_-10px_rgba(0,0,0,0.4)] hover:scale-105 transition-all"
+      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--bronze)]/40 bg-card/90 backdrop-blur-md shadow-[var(--shadow-elegant)] hover:scale-105 hover:border-[var(--bronze)]/70 transition-all"
     >
-      <Sun className="h-5 w-5 text-foreground rotate-0 scale-100 dark:-rotate-90 dark:scale-0 transition-transform duration-500" />
-      <Moon className="absolute h-5 w-5 text-foreground rotate-90 scale-0 dark:rotate-0 dark:scale-100 transition-transform duration-500" />
+      <Sun
+        className="h-5 w-5 text-[var(--bronze)] rotate-0 scale-100 dark:-rotate-90 dark:scale-0 transition-transform duration-500"
+        strokeWidth={1.75}
+      />
+      <Moon
+        className="absolute h-5 w-5 text-[var(--bronze)] rotate-90 scale-0 dark:rotate-0 dark:scale-100 transition-transform duration-500"
+        strokeWidth={1.75}
+      />
     </button>
   );
 }

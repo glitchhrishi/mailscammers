@@ -1,4 +1,4 @@
-import { Inbox, ShieldCheck, FileSearch, Info, Sparkles } from "lucide-react";
+import { ScrollText, ShieldCheck, Feather, BookOpen } from "lucide-react";
 
 interface AppSidebarProps {
   view: "inbox" | "scan" | "about";
@@ -6,31 +6,42 @@ interface AppSidebarProps {
 }
 
 const items = [
-  { id: "inbox" as const, label: "History inbox", icon: Inbox },
-  { id: "scan" as const, label: "Scan an email", icon: FileSearch },
-  { id: "about" as const, label: "About", icon: Info },
+  { id: "inbox" as const, label: "History inbox", icon: ScrollText },
+  { id: "scan" as const, label: "Scan an email", icon: Feather },
+  { id: "about" as const, label: "About", icon: BookOpen },
 ];
 
 export function AppSidebar({ view, onChange }: AppSidebarProps) {
   return (
-    <aside className="hidden md:flex w-72 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-5">
-      <div className="flex items-center gap-3 px-2 py-2">
+    <aside
+      className="hidden md:flex w-72 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-6 relative"
+      style={{ backgroundImage: "var(--parchment-texture)" }}
+    >
+      {/* Ornamental top rule */}
+      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[var(--bronze)]/40 to-transparent" />
+
+      <div className="flex items-center gap-3 px-1 py-2">
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-xl text-primary-foreground shadow-[0_8px_24px_-8px_var(--primary)]"
+          className="flex h-11 w-11 items-center justify-center rounded-md text-primary-foreground shadow-md border border-[var(--bronze)]/40"
           style={{ background: "var(--gradient-primary)" }}
         >
-          <ShieldCheck className="h-5 w-5" strokeWidth={2.5} />
+          <ShieldCheck className="h-5 w-5" strokeWidth={1.75} />
         </div>
         <div>
-          <p className="text-base font-bold tracking-tight leading-none">LegitMail</p>
-          <p className="text-[11px] text-muted-foreground mt-1 tracking-wide uppercase">Trust your inbox</p>
+          <p className="serif-display text-2xl leading-none text-foreground">LegitMail</p>
+          <p className="small-caps text-[10px] text-muted-foreground mt-1.5">Veritas in epistulis</p>
         </div>
       </div>
 
-      <nav className="mt-8 space-y-1">
-        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/70">
-          Navigation
-        </p>
+      {/* Divider with diamond ornament */}
+      <div className="flex items-center gap-3 my-7">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-[var(--bronze)] text-[10px]">◆</span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      <nav className="space-y-1.5">
+        <p className="px-3 mb-3 small-caps text-[10px] text-muted-foreground/80">Navigation</p>
         {items.map((item) => {
           const Icon = item.icon;
           const active = view === item.id;
@@ -40,42 +51,32 @@ export function AppSidebar({ view, onChange }: AppSidebarProps) {
               type="button"
               onClick={() => onChange(item.id)}
               className={
-                "group w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all relative " +
+                "group w-full flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all relative border " +
                 (active
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-sm"
-                  : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-foreground")
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium border-[var(--bronze)]/30 shadow-sm"
+                  : "border-transparent text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground hover:border-border")
               }
             >
-              {active && (
-                <span
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full"
-                  style={{ background: "var(--gradient-primary)" }}
-                />
-              )}
               <Icon
-                className={"h-4 w-4 transition-colors " + (active ? "text-primary" : "")}
-                strokeWidth={active ? 2.5 : 2}
+                className={"h-4 w-4 " + (active ? "text-[var(--bronze)]" : "")}
+                strokeWidth={1.75}
               />
-              {item.label}
+              <span className="tracking-wide">{item.label}</span>
+              {active && <span className="ml-auto text-[var(--bronze)] text-[10px]">◆</span>}
             </button>
           );
         })}
       </nav>
 
-      <div
-        className="mt-auto rounded-2xl border border-border/60 p-4 text-xs relative overflow-hidden"
-        style={{ background: "var(--gradient-surface)" }}
-      >
-        <div
-          className="absolute -top-8 -right-8 h-24 w-24 rounded-full opacity-20 blur-2xl"
-          style={{ background: "var(--gradient-primary)" }}
-        />
-        <div className="flex items-center gap-2 mb-2 relative">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
-          <p className="font-semibold text-foreground text-[11px] uppercase tracking-wider">Safety tip</p>
+      {/* Footer mark */}
+      <div className="mt-auto pt-6">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-[var(--bronze)] text-[10px]">✦</span>
+          <div className="h-px flex-1 bg-border" />
         </div>
-        <p className="text-muted-foreground leading-relaxed relative">
-          Real employers will never ask for a fee, gift card, or bank details before you start.
+        <p className="text-center small-caps text-[10px] text-muted-foreground">
+          Anno · MMXXVI
         </p>
       </div>
     </aside>

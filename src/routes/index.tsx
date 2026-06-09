@@ -176,6 +176,8 @@ function Dashboard() {
           onClose={() => setOpenId(null)}
         />
       )}
+
+      <ThemeToggle />
     </div>
   );
 }

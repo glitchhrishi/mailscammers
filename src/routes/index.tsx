@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Inbox, ShieldCheck, Trash2 } from "lucide-react";
+import { Inbox, ShieldCheck, Trash2, CheckCircle2, AlertTriangle, ShieldAlert, Mail } from "lucide-react";
 
 import { AppSidebar } from "@/components/AppSidebar";
 import { EmailListItem } from "@/components/EmailListItem";
 import { EmailDetailModal } from "@/components/EmailDetailModal";
 import { ScanForm } from "@/components/ScanForm";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { clearHistory, useHistory } from "@/lib/history-store";
 
 export const Route = createFileRoute("/")({
@@ -72,21 +73,40 @@ function Dashboard() {
 
           {view === "inbox" && (
             <>
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                <StatCard label="Safe" value={counts.safe} tone="safe" />
-                <StatCard label="Suspicious" value={counts.suspicious} tone="warn" />
-                <StatCard label="Scam" value={counts.scam} tone="danger" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <StatCard label="Safe" value={counts.safe} tone="safe" icon={CheckCircle2} />
+                <StatCard label="Suspicious" value={counts.suspicious} tone="warn" icon={AlertTriangle} />
+                <StatCard label="Scam" value={counts.scam} tone="danger" icon={ShieldAlert} />
               </div>
 
               {history.length === 0 ? (
-                <div className="rounded-2xl border border-dashed bg-card p-10 text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                    <Inbox className="h-5 w-5 text-muted-foreground" />
+                <div
+                  className="rounded-3xl border border-dashed border-border/70 p-12 text-center relative overflow-hidden"
+                  style={{ background: "var(--gradient-surface)" }}
+                >
+                  <div
+                    className="absolute inset-x-0 -top-20 mx-auto h-40 w-40 rounded-full opacity-20 blur-3xl"
+                    style={{ background: "var(--gradient-primary)" }}
+                  />
+                  <div className="relative">
+                    <div
+                      className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border/60 shadow-sm"
+                      style={{ background: "var(--gradient-surface)" }}
+                    >
+                      <Mail className="h-7 w-7 text-primary" strokeWidth={1.75} />
+                    </div>
+                    <p className="font-semibold text-lg">No scans yet</p>
+                    <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
+                      Head to{" "}
+                      <button
+                        onClick={() => setView("scan")}
+                        className="text-primary font-medium hover:underline underline-offset-2"
+                      >
+                        Scan an email
+                      </button>{" "}
+                      to analyze your first message.
+                    </p>
                   </div>
-                  <p className="font-medium">No scans yet</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Head to <button onClick={() => setView("scan")} className="text-primary underline underline-offset-2">Scan an email</button> to analyze your first message.
-                  </p>
                 </div>
               ) : (
                 <>
@@ -96,7 +116,7 @@ function Dashboard() {
                       onClick={() => {
                         if (confirm("Clear all scan history?")) clearHistory();
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-danger"
+                      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
                     >
                       <Trash2 className="h-3.5 w-3.5" /> Clear history
                     </button>

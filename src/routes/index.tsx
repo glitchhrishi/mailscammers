@@ -224,22 +224,24 @@ function StatCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-2xl border ${toneStyles.ring} bg-card p-5 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-elegant)] transition-all`}
+      className={`group relative overflow-hidden rounded-lg border ${toneStyles.ring} bg-card p-6 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-elegant)] transition-all`}
+      style={{ backgroundImage: "var(--parchment-texture)" }}
     >
+      {/* Top bronze rule */}
+      <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-[var(--bronze)]/40 to-transparent" />
+
       <div
-        className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${toneStyles.glow} to-transparent opacity-60 blur-2xl pointer-events-none`}
+        className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${toneStyles.glow} to-transparent opacity-50 blur-2xl pointer-events-none`}
       />
       <div className="relative flex items-start justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-medium">
-            {label}
-          </p>
-          <p className="text-3xl font-bold mt-2 tracking-tight text-foreground">{value}</p>
+          <p className="small-caps text-[10px] text-muted-foreground">{label}</p>
+          <p className="serif-display text-4xl mt-2 text-foreground">{value}</p>
         </div>
         <div
-          className={`flex h-10 w-10 items-center justify-center rounded-xl ${toneStyles.iconBg}`}
+          className={`flex h-11 w-11 items-center justify-center rounded-md border border-[var(--bronze)]/30 ${toneStyles.iconBg}`}
         >
-          <Icon className="h-5 w-5" strokeWidth={2.25} />
+          <Icon className="h-5 w-5" strokeWidth={1.75} />
         </div>
       </div>
     </div>

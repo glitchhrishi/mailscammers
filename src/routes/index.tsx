@@ -180,19 +180,55 @@ function Dashboard() {
   );
 }
 
-function StatCard({ label, value, tone }: { label: string; value: number; tone: "safe" | "warn" | "danger" }) {
-  const styles =
-    tone === "safe"
-      ? "border-safe/30 bg-safe/5"
-      : tone === "warn"
-        ? "border-warn/40 bg-warn/10"
-        : "border-danger/30 bg-danger/5";
-  const text =
-    tone === "safe" ? "text-safe" : tone === "warn" ? "text-warn-foreground" : "text-danger";
+function StatCard({
+  label,
+  value,
+  tone,
+  icon: Icon,
+}: {
+  label: string;
+  value: number;
+  tone: "safe" | "warn" | "danger";
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+}) {
+  const toneStyles = {
+    safe: {
+      ring: "border-safe/20",
+      iconBg: "bg-safe/10 text-safe",
+      glow: "from-safe/10",
+    },
+    warn: {
+      ring: "border-warn/30",
+      iconBg: "bg-warn/15 text-warn-foreground",
+      glow: "from-warn/15",
+    },
+    danger: {
+      ring: "border-danger/20",
+      iconBg: "bg-danger/10 text-danger",
+      glow: "from-danger/10",
+    },
+  }[tone];
+
   return (
-    <div className={`rounded-xl border p-4 ${styles}`}>
-      <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className={`text-2xl font-bold mt-1 ${text}`}>{value}</p>
+    <div
+      className={`group relative overflow-hidden rounded-2xl border ${toneStyles.ring} bg-card p-5 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-elegant)] transition-all`}
+    >
+      <div
+        className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${toneStyles.glow} to-transparent opacity-60 blur-2xl pointer-events-none`}
+      />
+      <div className="relative flex items-start justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-medium">
+            {label}
+          </p>
+          <p className="text-3xl font-bold mt-2 tracking-tight text-foreground">{value}</p>
+        </div>
+        <div
+          className={`flex h-10 w-10 items-center justify-center rounded-xl ${toneStyles.iconBg}`}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2.25} />
+        </div>
+      </div>
     </div>
   );
 }

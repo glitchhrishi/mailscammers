@@ -1,4 +1,4 @@
-import { ScrollText, ShieldCheck, FeatherIcon, BookOpen } from "lucide-react";
+import { ScrollText, ShieldCheck, Feather, BookOpen } from "lucide-react";
 
 interface AppSidebarProps {
   view: "inbox" | "scan" | "about";
@@ -7,7 +7,7 @@ interface AppSidebarProps {
 
 const items = [
   { id: "inbox" as const, label: "History inbox", icon: ScrollText },
-  { id: "scan" as const, label: "Scan an email", icon: FeatherIcon },
+  { id: "scan" as const, label: "Scan an email", icon: Feather },
   { id: "about" as const, label: "About", icon: BookOpen },
 ];
 
